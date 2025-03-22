@@ -29,4 +29,21 @@
         public string Clave { get; set; }
 
     }
+
+    public class NuevoUsuario
+    {
+        public string Nombre { get; set; }
+        public string Cedula { get; set; }
+        public string Telefono { get; set; }
+        public string Correo { get; set; }
+        public string Clave { get; set; }
+        public int IdRol { get; set; }
+    }
+
+    public class UsuarioRol
+    {
+        public int IdUsuario { get; set; }
+        public int IdRol { get; set; }
+    }
+
 }

@@ -40,7 +40,25 @@ namespace Sistema_Citas.LogicaNegocio
             }
         }
 
-            #endregion Metodos Obtener
+        #endregion Metodos Obtener
 
+        #region Metodos Insertar
+        public int AgregarUsuario(NuevoUsuario ElUsuario)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                Resultado = _UsuariosAD.AgregarUsuario(ElUsuario);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
         }
+
+        #endregion Metodos Insertar
+    }
 }

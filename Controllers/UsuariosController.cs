@@ -62,6 +62,30 @@ namespace Sistema_Citas.Controllers
 
         #endregion Metodos Obtener
 
+        #region Metodos Insertar
+        [HttpPost("CrearUsuario")]
+        public async Task<IActionResult> CrearUsuario([FromBody] NuevoUsuario ElUsuarioNuevo)
+        {
+            int Resultado = 0;
+            try
+            {
+                Resultado = _UsuariosLN.AgregarUsuario(ElUsuarioNuevo);
 
+                if (Resultado != 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = ElUsuarioNuevo, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo crear el usuario", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+
+        #endregion Metodos Insertar
     }
 }

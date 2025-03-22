@@ -110,5 +110,90 @@ namespace Sistema_Citas.AccesoDatos
         }
 
         #endregion Metodos Obtener
+
+        #region Metodos Insertar
+        public int AgregarUsuario(NuevoUsuario ElUsuario)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarUsuario";
+                cmd.Parameters.AddWithValue("@Nombre", ElUsuario.Nombre);
+                cmd.Parameters.AddWithValue("@Cedula", ElUsuario.Cedula);
+                cmd.Parameters.AddWithValue("@Telefono", string.IsNullOrEmpty(ElUsuario.Telefono) ? (object)DBNull.Value : ElUsuario.Telefono);
+                cmd.Parameters.AddWithValue("@Correo", ElUsuario.Correo);
+                cmd.Parameters.AddWithValue("@Clave", ElUsuario.Clave);
+
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt);
+                cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Resultado = Convert.ToInt32(cmd.Parameters["@ID"].Value);
+
+                if (Resultado > 0)
+                {
+                    UsuarioRol ElUsuarioRol = new UsuarioRol()
+                    {
+                        IdUsuario = Resultado,
+                        IdRol = ElUsuario.IdRol,
+                    };
+
+                    InsertarRolUsuario(ElUsuarioRol);
+                }
+
+                conexion.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
+
+        public int InsertarRolUsuario(UsuarioRol ElUsuarioRol)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarUsuarioRol";
+                cmd.Parameters.AddWithValue("@IdUsuario", ElUsuarioRol.IdUsuario);
+                cmd.Parameters.AddWithValue("@IdRol", ElUsuarioRol.IdRol);
+
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt);
+                cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Resultado = Convert.ToInt32(cmd.Parameters["@ID"].Value);
+
+                conexion.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
+
+
+
+        #endregion Metodos Insertar
     }
 }
