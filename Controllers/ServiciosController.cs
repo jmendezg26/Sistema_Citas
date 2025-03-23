@@ -39,7 +39,7 @@ namespace Sistema_Citas.Controllers
 
         #region Metodos Insertar
         [HttpPost("CrearServicio")]
-        public async Task<IActionResult> CrearServicio([FromBody] NuevoServicio ElServicio)
+        public IActionResult CrearServicio([FromBody] NuevoServicio ElServicio)
         {
             int Resultado = 0;
             try
@@ -64,7 +64,7 @@ namespace Sistema_Citas.Controllers
 
         #region Metodos Editar
         [HttpPost("EditarServicio")]
-        public async Task<IActionResult> EditarServicio([FromBody] Servicios ElServicio)
+        public IActionResult EditarServicio([FromBody] Servicios ElServicio)
         {
             int Resultado = 0;
             try

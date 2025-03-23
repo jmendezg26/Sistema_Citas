@@ -14,7 +14,7 @@ namespace Sistema_Citas.Controllers
 
         #region Metodos Obtener
         [HttpGet("IniciarSesion")]
-        public async Task<IActionResult> IniciarSesion(string Correo, string Clave)
+        public IActionResult IniciarSesion(string Correo, string Clave)
         {
             UsuarioLogin ElUsuario = new UsuarioLogin();
 
@@ -64,7 +64,7 @@ namespace Sistema_Citas.Controllers
 
         #region Metodos Insertar
         [HttpPost("CrearUsuario")]
-        public async Task<IActionResult> CrearUsuario([FromBody] NuevoUsuario ElUsuarioNuevo)
+        public IActionResult CrearUsuario([FromBody] NuevoUsuario ElUsuarioNuevo)
         {
             int Resultado = 0;
             try
