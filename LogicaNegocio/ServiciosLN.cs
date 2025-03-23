@@ -23,6 +23,23 @@ namespace Sistema_Citas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<UsuariosXServicio> ObtenerUsuariosXServicio(int IdServicio)
+        {
+            List<UsuariosXServicio> ListaUsuarioXServicio = new List<UsuariosXServicio>();
+
+            try
+            {
+                ListaUsuarioXServicio = _ServiciosAD.ObtenerUsuariosXServicio(IdServicio);
+
+                return ListaUsuarioXServicio;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -41,9 +58,25 @@ namespace Sistema_Citas.LogicaNegocio
 
             return Resultado;
         }
+
+        public int AgregarServicioUsuario(ServicioUsuario ElServicio)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                Resultado = _ServiciosAD.AgregarServicioUsuario(ElServicio);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
         #endregion Metodos Insertar
 
-        #region Metodos Editar
+            #region Metodos Editar
         public int EditarServicio(Servicios ElServicio)
         {
             int Resultado = 0;

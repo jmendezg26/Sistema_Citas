@@ -22,6 +22,17 @@ namespace Sistema_Citas.AccesoDatos
             };
         }
 
+        private UsuariosXServicio CargaUsuariosXServicio(IDataReader Ready)
+        {
+            return new UsuariosXServicio
+            {
+                IdUsuario = Convert.ToInt32(Ready["IdUsuario"]),
+                Nombre = Convert.ToString(Ready["Nombre"]),
+                Telefono = Convert.ToString(Ready["Telefono"]),
+                Correo = Convert.ToString(Ready["Correo"]),
+            };
+        }
+
         #endregion Carga Datos
 
         #region Metodos Obtener
@@ -56,6 +67,39 @@ namespace Sistema_Citas.AccesoDatos
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<UsuariosXServicio> ObtenerUsuariosXServicio(int IdServicio)
+        {
+            List<UsuariosXServicio> ListaUsuarioXServicio = new List<UsuariosXServicio>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerUsuariosXServicio";
+                cmd.Parameters.AddWithValue("@IdServicio", IdServicio);
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    ListaUsuarioXServicio.Add(CargaUsuariosXServicio(DsReader));
+                }
+
+                conexion.Close();
+
+                return ListaUsuarioXServicio;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -77,6 +121,39 @@ namespace Sistema_Citas.AccesoDatos
                 cmd.Parameters.AddWithValue("@Duracion", ElServicio.DuracionMinutos);
                 cmd.Parameters.AddWithValue("@Descripcion", ElServicio.Descripcion);
                 cmd.Parameters.AddWithValue("@URLimagen", ElServicio.URLimagen);
+
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt);
+                cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Resultado = Convert.ToInt32(cmd.Parameters["@ID"].Value);
+
+                conexion.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
+
+        public int AgregarServicioUsuario(ServicioUsuario ElServicio)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarServicioUsuario";
+                cmd.Parameters.AddWithValue("@IdServicio", ElServicio.IdServicio);
+                cmd.Parameters.AddWithValue("@IdUsuario", ElServicio.IdUsuario);
 
                 cmd.Parameters.Add("@ID", SqlDbType.BigInt);
                 cmd.Parameters["@ID"].Direction = ParameterDirection.Output;

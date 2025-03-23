@@ -35,6 +35,29 @@ namespace Sistema_Citas.Controllers
                 return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
             }
         }
+
+        [HttpGet("ObtenerUsuariosXServicio")]
+        public IActionResult ObtenerUsuariosXServicio(int IdServicio)
+        {
+            List<UsuariosXServicio> ListaUsuariosXServicio = new List<UsuariosXServicio>();
+            try
+            {
+                ListaUsuariosXServicio = _ServiciosLN.ObtenerUsuariosXServicio(IdServicio);
+
+                if (ListaUsuariosXServicio.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = ListaUsuariosXServicio, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener la lista de servicios", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -42,9 +65,34 @@ namespace Sistema_Citas.Controllers
         public IActionResult CrearServicio([FromBody] NuevoServicio ElServicio)
         {
             int Resultado = 0;
+
             try
             {
                 Resultado = _ServiciosLN.AgregarServicio(ElServicio);
+
+                if (Resultado != 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = ElServicio, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo crear el servicio", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+
+        [HttpPost("AgregarServicioUsuario")]
+        public IActionResult AgregarServicioUsuario([FromBody] ServicioUsuario ElServicio)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                Resultado = _ServiciosLN.AgregarServicioUsuario(ElServicio);
 
                 if (Resultado != 0)
                 {
